@@ -13,20 +13,20 @@ An AI-powered orchestration engine and interactive visualization platform design
 
 ```mermaid
 graph TD
-    subgraph Frontend [Frontend (React + Vite)]
-        UI[User Interface]
-        HUD[Telemetry HUD & Recharts]
-        Graph[Knowledge Graph Canvas]
+    subgraph Frontend ["Frontend (React + Vite)"]
+        UI["User Interface"]
+        HUD["Telemetry HUD & Recharts"]
+        Graph["Knowledge Graph Canvas"]
         UI --> Graph
         Graph --> HUD
     end
 
-    subgraph Backend [Backend (Python FastAPI)]
-        API[FastAPI Server]
-        Orchestrator[LangChain Orchestrator]
-        Agent1[Inflation Agent]
-        Agent2[Housing Agent]
-        Agent3[Macro Agent]
+    subgraph Backend ["Backend (Python FastAPI)"]
+        API["FastAPI Server"]
+        Orchestrator["LangChain Orchestrator"]
+        Agent1["Inflation Agent"]
+        Agent2["Housing Agent"]
+        Agent3["Macro Agent"]
         
         API --> Orchestrator
         Orchestrator --> Agent1
@@ -34,12 +34,12 @@ graph TD
         Orchestrator --> Agent3
     end
 
-    subgraph External [External Services]
-        LLM[Google Gemini API]
-        FRED[Federal Reserve Economic Data API]
+    subgraph External ["External Services"]
+        LLM["Google Gemini API"]
+        FRED["Federal Reserve Economic Data API"]
     end
 
-    UI -- REST API --> API
+    UI -- "REST API" --> API
     Agent1 --> LLM
     Agent1 --> FRED
     Agent2 --> LLM
