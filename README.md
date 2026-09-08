@@ -63,59 +63,73 @@ graph TD
 - FRED API Integration
 - Uvicorn
 
-## Getting Started
+## Getting Started: Comprehensive Setup Guide
 
-### Prerequisites
-- Node.js (v18+)
-- Python (3.9+)
-- A valid FRED API Key
-- A valid Google Gemini API Key
+Follow these step-by-step instructions to get the application running from scratch on a fresh machine (such as an AWS Workspace).
 
-### 1. Environment Setup
-
-Create a `.env` file in the root directory of your project and add your API keys:
-
-```env
-FRED_API_KEY=your_fred_api_key_here
-GEMINI_API_KEY=your_gemini_api_key_here
-```
-
-*(Note: Do not commit your `.env` file to version control. It should be added to your `.gitignore`.)*
-
-### 2. Backend Setup
-
-Open a terminal and navigate to the project root:
-
+### Step 1: Clone the Repository
+First, clone the repository to your local machine and navigate into the project directory:
 ```bash
-# Create a virtual environment
-python -m venv .venv
-
-# Activate the virtual environment
-# On macOS/Linux:
-source .venv/bin/activate
-# On Windows:
-# .venv\Scripts\activate
-
-# Install the Python dependencies
-pip install fastapi uvicorn langchain langchain-google-genai python-dotenv httpx
+git clone https://github.com/YOUR_USERNAME/fred-knowledge-graph.git
+cd fred-knowledge-graph
 ```
 
-Start the backend server:
+### Step 2: System Prerequisites
+Ensure you have the following installed on your machine:
+- **Python 3.9+** and `pip` (Required for the backend)
+- **Node.js (v18+)** and `npm` (Required for the frontend)
+
+### Step 3: Configure Environment Variables
+You must provide your own API keys for the backend orchestration engine to function.
+
+1. Locate the `.env_default` file in the root directory.
+2. Create a copy of it and name it exactly `.env`.
+3. Open `.env` and paste your actual API keys:
+```env
+FRED_API_KEY=your_actual_fred_api_key_here
+GEMINI_API_KEY=your_actual_gemini_api_key_here
+```
+*(Note: `.env` is ignored by git so your secrets will not be accidentally pushed to GitHub).*
+
+### Step 4: Backend Setup (Python)
+Open a terminal in the root of the project to set up the backend.
+
+1. **Create a virtual environment:**
+```bash
+python -m venv .venv
+```
+2. **Activate the virtual environment:**
+   - On **macOS/Linux** (or AWS Linux workspaces):
+     ```bash
+     source .venv/bin/activate
+     ```
+   - On **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+3. **Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
+4. **Start the FastAPI server:**
 ```bash
 python backend/server.py
 ```
-*The API will run on `http://localhost:8001`.*
+*(The backend API will now be running on `http://0.0.0.0:8001`)*
 
-### 3. Frontend Setup
+### Step 5: Frontend Setup (React)
+Open a **second, separate terminal window** in the root of the project.
 
-Open a separate terminal window in the project root:
-
+1. **Install Node dependencies:**
 ```bash
-# Install the Node dependencies
 npm install
-
-# Start the Vite development server
+```
+2. **Start the Vite development server:**
+```bash
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173` (or the port provided by Vite).
+### Step 6: Launch the App
+Open your web browser and navigate to the local URL provided by the Vite server (typically `http://localhost:5173`). 
+
+You will be greeted by the Zero-State Onboarding overlay. Click on any of the suggested prompt cards to automatically dispatch the AI agents and watch the knowledge graph build itself in real-time!
