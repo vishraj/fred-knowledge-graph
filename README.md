@@ -27,25 +27,29 @@ graph TD
         Agent1["Inflation Agent"]
         Agent2["Housing Agent"]
         Agent3["Macro Agent"]
+        LocalData[("Offline FRED Data (JSON)")]
         
         API --> Orchestrator
         Orchestrator --> Agent1
         Orchestrator --> Agent2
         Orchestrator --> Agent3
+        Agent1 --> LocalData
+        Agent2 --> LocalData
+        Agent3 --> LocalData
     end
 
     subgraph External ["External Services"]
-        LLM["Google Gemini API"]
-        FRED["Federal Reserve Economic Data API"]
+        LLM["Amazon Bedrock (Claude 3.5 Sonnet) & Google Gemini"]
+        FRED["Federal Reserve Economic Data API (Fallback)"]
     end
 
     UI -- "REST API" --> API
     Agent1 --> LLM
-    Agent1 --> FRED
     Agent2 --> LLM
-    Agent2 --> FRED
     Agent3 --> LLM
-    Agent3 --> FRED
+    Agent1 -. "Optional" .-> FRED
+    Agent2 -. "Optional" .-> FRED
+    Agent3 -. "Optional" .-> FRED
 ```
 
 ## Tech Stack
@@ -59,8 +63,9 @@ graph TD
 
 **Backend:**
 - Python (FastAPI)
-- LangChain & `langchain-google-genai`
-- FRED API Integration
+- LangChain, `langchain-aws` (Amazon Bedrock), & `langchain-google-genai`
+- Offline FRED Data Processing & FRED API Integration
+- `uv` for lightning-fast dependency management
 - Uvicorn
 
 ## Getting Started: Comprehensive Setup Guide
@@ -76,44 +81,37 @@ cd fred-knowledge-graph
 
 ### Step 2: System Prerequisites
 Ensure you have the following installed on your machine:
-- **Python 3.9+** and `pip` (Required for the backend)
+- **Python 3.9+**
+- **uv** (Required for lightning-fast Python dependency management)
 - **Node.js (v18+)** and `npm` (Required for the frontend)
 
 ### Step 3: Configure Environment Variables
-You must provide your own API keys for the backend orchestration engine to function.
+You must provide your LLM API keys for the backend orchestration engine. (The FRED data uses offline caching by default).
 
 1. Locate the `.env_default` file in the root directory.
 2. Create a copy of it and name it exactly `.env`.
 3. Open `.env` and paste your actual API keys:
 ```env
-FRED_API_KEY=your_actual_fred_api_key_here
+# Required for Claude via AWS Bedrock
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_DEFAULT_REGION=...
+
+# Or required for Google Gemini
 GEMINI_API_KEY=your_actual_gemini_api_key_here
+
+# Optional (only needed if falling back from offline data)
+FRED_API_KEY=your_actual_fred_api_key_here
 ```
 *(Note: `.env` is ignored by git so your secrets will not be accidentally pushed to GitHub).*
 
 ### Step 4: Backend Setup (Python)
 Open a terminal in the root of the project to set up the backend.
 
-1. **Create a virtual environment:**
+1. **Install dependencies and start the FastAPI server:**
+Using the modern `uv` package manager, you can run the server directly (it will automatically handle your virtual environment):
 ```bash
-python -m venv .venv
-```
-2. **Activate the virtual environment:**
-   - On **macOS/Linux** (or AWS Linux workspaces):
-     ```bash
-     source .venv/bin/activate
-     ```
-   - On **Windows**:
-     ```bash
-     .venv\Scripts\activate
-     ```
-3. **Install dependencies:**
-```bash
-pip install -r requirements.txt
-```
-4. **Start the FastAPI server:**
-```bash
-python backend/server.py
+uv run python backend/server.py
 ```
 *(The backend API will now be running on `http://0.0.0.0:8001`)*
 

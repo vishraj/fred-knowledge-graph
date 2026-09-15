@@ -76,12 +76,7 @@ async def process_query(req: QueryRequest):
     # Initialize the LLM dynamically per request using the user's config
     if "claude" in req.model:
         llm = ChatBedrock(
-            model_id=req.model,
-            model_kwargs={
-                "temperature": req.temperature,
-                "top_p": req.top_p,
-                "top_k": req.top_k
-            }
+            model_id=req.model
         )
     else:
         llm = ChatGoogleGenerativeAI(
@@ -157,11 +152,12 @@ async def process_query(req: QueryRequest):
 
     # Step 4: Use LLM to synthesize final insight using real data
     synthesis_prompt = PromptTemplate.from_template(
-        "You are a senior Federal Reserve economist. "
+        "You are a helpful assistant explaining economics to a general audience. "
         "The user asked: '{query}'. "
         "Our agents discovered the following causal chain: {edges}. "
         "Here is the actual recent historical time-series data for these metrics: {data}. "
-        "Write a 3-sentence executive summary answering the user's question, using the actual data provided to back up your claims. Be professional and insightful."
+        "Write a concise summary answering the user's question in simple, everyday language that a non-economist can easily understand. Do not use jargon. "
+        "Limit your entire response to exactly 5 or 6 short sentences. Never exceed this limit."
     )
     
     final_insight_response = llm.invoke(synthesis_prompt.format(
