@@ -327,17 +327,25 @@ function App() {
               <p>Select a suggestion below to deploy AI agents to traverse the economic knowledge graph.</p>
 
               <div className="prompt-cards-container">
-                <div className="prompt-card" onClick={() => handleSuggestedQuery("How does CPI inflation impact regional housing markets?")}>
+                <div className="prompt-card" onClick={() => handleSuggestedQuery("How have recent spikes in CPI inflation impacted current regional housing markets?")}>
                   <div className="prompt-card-icon"><Building2 size={18} /></div>
-                  <div className="prompt-card-text">How does CPI inflation impact regional housing markets?</div>
+                  <div className="prompt-card-text">How have recent spikes in CPI inflation impacted current regional housing markets?</div>
                 </div>
-                <div className="prompt-card" onClick={() => handleSuggestedQuery("Analyze the cascading effects of tech sector unemployment.")}>
+                <div className="prompt-card" onClick={() => handleSuggestedQuery("Analyze the cascading effects of recent tech sector unemployment trends.")}>
                   <div className="prompt-card-icon"><Users size={18} /></div>
-                  <div className="prompt-card-text">Analyze the cascading effects of tech sector unemployment.</div>
+                  <div className="prompt-card-text">Analyze the cascading effects of recent tech sector unemployment trends.</div>
                 </div>
-                <div className="prompt-card" onClick={() => handleSuggestedQuery("What is the relationship between interest rates and real wages?")}>
+                <div className="prompt-card" onClick={() => handleSuggestedQuery("What is the current relationship between federal interest rates and real wage stagnation?")}>
                   <div className="prompt-card-icon"><TrendingUp size={18} /></div>
-                  <div className="prompt-card-text">What is the relationship between interest rates and real wages?</div>
+                  <div className="prompt-card-text">What is the current relationship between federal interest rates and real wage stagnation?</div>
+                </div>
+                <div className="prompt-card" onClick={() => handleSuggestedQuery("Trace the recent economic chain reaction from consumer price volatility to shifts in national employment.")}>
+                  <div className="prompt-card-icon"><Activity size={18} /></div>
+                  <div className="prompt-card-text">Trace the recent economic chain reaction from consumer price volatility to shifts in national employment.</div>
+                </div>
+                <div className="prompt-card" onClick={() => handleSuggestedQuery("How have stagnant nominal wages impacted household purchasing power over the last year?")}>
+                  <div className="prompt-card-icon"><Zap size={18} /></div>
+                  <div className="prompt-card-text">How have stagnant nominal wages impacted household purchasing power over the last year?</div>
                 </div>
               </div>
             </div>

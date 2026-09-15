@@ -123,23 +123,36 @@ async def process_query(req: QueryRequest):
     discovered_nodes = {start_node}
     discovered_edges = []
     
+    def get_agent_name(node_id):
+        mapping = {
+            "cpi": "Inflation Agent",
+            "wages": "Labor Agent",
+            "mortgage_rates": "Monetary Agent",
+            "housing_affordability": "Housing Agent",
+            "employment": "Labor Agent",
+            "price_changes": "Market Agent"
+        }
+        return mapping.get(node_id, "Macro Agent")
+
     # Hop 1
-    add_log("Inflation Agent", "Analyzing Graph", f"Finding relationships for {start_node}...")
+    agent_1 = get_agent_name(start_node)
+    add_log(agent_1, "Analyzing Graph", f"Finding relationships for {start_node}...")
     hop1_edges = [e for e in EDGES if e["source"] == start_node]
     for e in hop1_edges:
         discovered_edges.append(e)
         discovered_nodes.add(e["target"])
-        add_log("Inflation Agent", "Relationship Discovered", f"Found link: {e['source']} -> {e['target']}")
+        add_log(agent_1, "Relationship Discovered", f"Found link: {e['source']} -> {e['target']}")
         
     # Hop 2
     if hop1_edges:
         next_node = hop1_edges[0]["target"]
-        add_log("Housing Agent", "Deep Dive", f"Investigating cascading effects from {next_node}...")
+        agent_2 = get_agent_name(next_node)
+        add_log(agent_2, "Deep Dive", f"Investigating cascading effects from {next_node}...")
         hop2_edges = [e for e in EDGES if e["source"] == next_node]
         for e in hop2_edges:
             discovered_edges.append(e)
             discovered_nodes.add(e["target"])
-            add_log("Housing Agent", "Relationship Discovered", f"Found link: {e['source']} -> {e['target']}")
+            add_log(agent_2, "Relationship Discovered", f"Found link: {e['source']} -> {e['target']}")
 
     # Step 3: Fetch actual FRED data for discovered nodes
     add_log("Validation Agent", "Data Retrieval", "Extracting real FRED time-series data for discovered nodes to synthesize an insight.")
