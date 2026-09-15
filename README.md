@@ -6,7 +6,7 @@ An AI-powered orchestration engine and interactive visualization platform design
 
 - **Interactive Knowledge Graph:** A responsive, physics-based D3 force-directed graph (`react-force-graph-2d`) that visualizes complex economic relationships in real-time.
 - **Enterprise Telemetry HUD:** A sleek, glassmorphism-styled Heads-Up Display that provides deep-dive analytics on selected economic nodes, featuring auto-scaling historical sparklines powered by Recharts.
-- **Multi-Agent Orchestration:** Driven by a Python backend using LangChain and Google's Gemini models. Specialized agents (Inflation, Housing, Validation) autonomously fetch and synthesize data to build the graph.
+- **Multi-Agent Orchestration:** Driven by a Python backend using LangChain and Google's Gemini models. Dynamically named specialized agents (Labor, Monetary, Market, Validation, etc.) autonomously fetch and synthesize data to build the graph.
 - **Zero-State Onboarding:** A polished, fully responsive onboarding flow that presents users with clickable "prompt cards" to execute complex economic queries with a single click.
 
 ## Architecture
@@ -24,18 +24,15 @@ graph TD
     subgraph Backend ["Backend (Python FastAPI)"]
         API["FastAPI Server"]
         Orchestrator["LangChain Orchestrator"]
-        Agent1["Inflation Agent"]
-        Agent2["Housing Agent"]
-        Agent3["Macro Agent"]
+        DynamicAgents["Dynamic Agents (Labor, Monetary, etc.)"]
+        ValidationAgent["Validation Agent"]
         LocalData[("Offline FRED Data (JSON)")]
         
         API --> Orchestrator
-        Orchestrator --> Agent1
-        Orchestrator --> Agent2
-        Orchestrator --> Agent3
-        Agent1 --> LocalData
-        Agent2 --> LocalData
-        Agent3 --> LocalData
+        Orchestrator --> DynamicAgents
+        DynamicAgents --> ValidationAgent
+        DynamicAgents --> LocalData
+        ValidationAgent --> LocalData
     end
 
     subgraph External ["External Services"]
@@ -44,12 +41,11 @@ graph TD
     end
 
     UI -- "REST API" --> API
-    Agent1 --> LLM
-    Agent2 --> LLM
-    Agent3 --> LLM
-    Agent1 -. "Optional" .-> FRED
-    Agent2 -. "Optional" .-> FRED
-    Agent3 -. "Optional" .-> FRED
+    Orchestrator --> LLM
+    DynamicAgents --> LLM
+    ValidationAgent --> LLM
+    DynamicAgents -. "Optional" .-> FRED
+    ValidationAgent -. "Optional" .-> FRED
 ```
 
 ## Tech Stack
